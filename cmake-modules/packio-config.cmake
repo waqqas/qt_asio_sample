@@ -2,7 +2,7 @@ include(ExternalProject)
 
 if(NOT TARGET Packio_project)
     ExternalProject_Add(Packio_project 
-        URL https://github.com/qchateau/packio/archive/2.0.1.tar.gz
+        URL https://github.com/qchateau/packio/archive/2.1.0.tar.gz
         CONFIGURE_COMMAND ""
         BUILD_COMMAND ""
         INSTALL_COMMAND ""

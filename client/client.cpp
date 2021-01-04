@@ -1,11 +1,14 @@
-#include <iostream>
+#include "mainwindow.h"
+
+#include <QApplication>
 #include <packio/packio.h>
+#include <thread>
 
 using packio::arg;
 using packio::nl_json_rpc::make_client;
 using packio::nl_json_rpc::rpc;
 
-int main(int, char **)
+int main(int argc, char *argv[])
 {
    using namespace packio::arg_literals;
 
@@ -18,17 +21,29 @@ int main(int, char **)
    client->socket().connect(server_ep);
 
    // Make an asynchronous call with named arguments
-   client->async_call("add", std::tuple{arg("a") = 42, arg("b") = 24}, [&](packio::error_code, const rpc::response_type &r) {
-      std::cout << "42 + 24 = " << r.result.get<int>() << std::endl;
-   });
+   // client->async_call("add", std::tuple{arg("a") = 42, arg("b") = 24}, [&](packio::error_code, const rpc::response_type
+   // &r) {
+   //    std::cout << "42 + 24 = " << r.result.get<int>() << std::endl;
+   // });
 
    // Use packio::net::use_future with named arguments and literals
-   client->async_call("multiply", std::tuple{"a"_arg = 12, "b"_arg = 23},
-                      [&](packio::error_code, const rpc::response_type &r) {
-                         std::cout << "12 * 23 = " << r.result.get<int>() << std::endl;
-                      });
+   // client->async_call("multiply", std::tuple{"a"_arg = 12, "b"_arg = 23},
+   //                    [&](packio::error_code, const rpc::response_type &r) {
+   //                       std::cout << "12 * 23 = " << r.result.get<int>() << std::endl;
+   //                    });
 
-   io.run();
+   // Run the io_context
+   std::thread thread{[&] { io.run(); }};
 
-   return 0;
+   // Qt application initializatin
+   QApplication a(argc, argv);
+   MainWindow   w(client);
+
+   w.show();
+
+   int return_code = a.exec();
+
+   thread.join();
+
+   return return_code;
 }

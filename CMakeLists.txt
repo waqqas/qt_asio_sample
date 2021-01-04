@@ -8,17 +8,5 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-
-project(qt_asio_sample VERSION 0.1.0 DESCRIPTION "Sample application that integrates Qt and Boost ASIO")
-
-set(SOURCES main.cpp )
-
-add_executable(${PROJECT_NAME} ${SOURCES})
-
-find_package(Packio REQUIRED)
-target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC "${Packio_INCLUDE_DIR}")
-add_dependencies(${PROJECT_NAME} Packio)
-
-find_package(JSON REQUIRED)
-target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC "${JSON_INCLUDE_DIR}")
-add_dependencies(${PROJECT_NAME} JSON)
+add_subdirectory("server")
+add_subdirectory("client")

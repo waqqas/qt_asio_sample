@@ -34,8 +34,13 @@ Building
 - `cmake ..`
 - `make`
 
-Running
+Running server
 ---
 
-- `./qt_asio_sample`
+- `./server/server`
 
+
+Running client
+---
+
+- `./client/client`

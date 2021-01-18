@@ -30,8 +30,6 @@ int main(int argc, char *argv[])
    QApplication q(argc, argv);
    MainWindow   w(nullptr, client);
 
-   w.show();
-
    int return_code = q.exec();
    work.reset();
 

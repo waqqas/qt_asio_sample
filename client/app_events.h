@@ -5,7 +5,6 @@
 
 const QEvent::Type ADD_RESULT_EVENT = static_cast<QEvent::Type>(QEvent::User + 1);
 
-// Define your custom event subclass
 class AddResultEvent : public QEvent
 {
  public:
@@ -21,6 +20,32 @@ class AddResultEvent : public QEvent
 
  private:
    int _result;
+};
+
+const QEvent::Type ADD_REQUEST_EVENT = static_cast<QEvent::Type>(QEvent::User + 2);
+
+class AddRequestEvent : public QEvent
+{
+ public:
+   AddRequestEvent(const int &param1, const int &param2)
+      : QEvent(ADD_REQUEST_EVENT)
+      , _param1(param1)
+      , _param2(param2)
+   {}
+
+   int param1() const
+   {
+      return _param1;
+   }
+
+   int param2() const
+   {
+      return _param2;
+   }
+
+ private:
+   int _param1;
+   int _param2;
 };
 
 #endif

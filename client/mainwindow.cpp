@@ -1,15 +1,16 @@
 #include "mainwindow.h"
 
-#include "./ui_mainwindow.h"
+#include "loginwindow.h"
+
+#include <QApplication>
 
 using packio::arg;
 using packio::nl_json_rpc::make_client;
 using packio::nl_json_rpc::rpc;
 
 MainWindow::MainWindow(QWidget *parent, MainWindow::packio_client_type &client)
-   : QMainWindow(parent)
+   : QWidget(parent)
    , _client(client)
-   , ui(new Ui::MainWindow)
    , trayIcon(new QSystemTrayIcon(this))
 {
    // Tray icon menu
@@ -29,20 +30,33 @@ MainWindow::MainWindow(QWidget *parent, MainWindow::packio_client_type &client)
 }
 
 MainWindow::~MainWindow()
-{
-   delete ui;
-}
+{}
 
 QMenu *MainWindow::createMenu()
 {
+   auto menu = new QMenu(this);
+
    // App can exit via Quit menu
    auto quitAction = new QAction("&Quit", this);
    connect(quitAction, &QAction::triggered, qApp, &QCoreApplication::quit);
 
-   auto menu = new QMenu(this);
    menu->addAction(quitAction);
 
+   auto loginAction = new QAction("&Login", this);
+   connect(loginAction, &QAction::triggered, this, &MainWindow::showLoginWindow);
+   menu->addAction(loginAction);
+
    return menu;
+}
+
+void MainWindow::showLoginWindow()
+{
+   LoginWindow *login = new LoginWindow(this);
+
+   if (!login->isVisible())
+   {
+      login->show();
+   }
 }
 
 void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason_)
@@ -50,20 +64,10 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason_)
    switch (reason_)
    {
    case QSystemTrayIcon::Trigger:
-      this->trayIcon->showMessage("Hello", "You clicked me!");
+      // this->trayIcon->showMessage("Hello", "You clicked me!");
       break;
    default:;
    }
-}
-
-void MainWindow::on_addButton_clicked()
-{
-   int a = ui->input1->toPlainText().toInt();
-   int b = ui->input2->toPlainText().toInt();
-
-   // Make an asynchronous call with named arguments
-   _client->async_call("add", std::tuple{arg("a") = a, arg("b") = b},
-                       [&](packio::error_code, const rpc::response_type &r) { postAddResult(r.result.get<int>()); });
 }
 
 void MainWindow::postAddResult(const int &result)
@@ -73,13 +77,17 @@ void MainWindow::postAddResult(const int &result)
 
 void MainWindow::customEvent(QEvent *event)
 {
-   if (event->type() == ADD_RESULT_EVENT)
+#pragma GCC diagnostic ignored "-Wswitch"
+   switch (event->type())
    {
-      handleAddResultEvent(static_cast<AddResultEvent *>(event));
+   case ADD_REQUEST_EVENT:
+      handleAddRequestEvent(static_cast<AddRequestEvent *>(event));
+      break;
    }
 }
 
-void MainWindow::handleAddResultEvent(const AddResultEvent *event)
+void MainWindow::handleAddRequestEvent(const AddRequestEvent *event)
 {
-   ui->addOutput->setText(QString::number(event->result()));
+   _client->async_call("add", std::tuple{arg("a") = event->param1(), arg("b") = event->param2()},
+                       [&](packio::error_code, const rpc::response_type &r) { postAddResult(r.result.get<int>()); });
 }

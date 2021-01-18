@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+    <class>LoginWindow</class>
+    <widget class="QMainWindow" name="LoginWindow">
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>400</width>
+                <height>300</height>
+            </rect>
+        </property>
+        <property name="windowTitle">
+            <string>LoginWindow</string>
+        </property>
+        <widget class="QWidget" name="centralWidget">
+            <widget class="QTextEdit" name="input1">
+                <property name="geometry">
+                    <rect>
+                        <x>90</x>
+                        <y>10</y>
+                        <width>201</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+            </widget>
+            <widget class="QTextEdit" name="input2">
+                <property name="geometry">
+                    <rect>
+                        <x>90</x>
+                        <y>60</y>
+                        <width>201</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+            </widget>
+            <widget class="QWidget" name="">
+                <property name="geometry">
+                    <rect>
+                        <x>30</x>
+                        <y>160</y>
+                        <width>311</width>
+                        <height>32</height>
+                    </rect>
+                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout">
+                    <item>
+                        <widget class="QPushButton" name="addButton">
+                            <property name="text">
+                                <string>Add</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QLabel" name="addOutput">
+                            <property name="text">
+                                <string>Sum</string>
+                            </property>
+                        </widget>
+                    </item>
+                </layout>
+            </widget>
+        </widget>
+    </widget>
+    <layoutdefault spacing="6" margin="11"/>
+    <resources/>
+    <connections/>
+</ui>

@@ -37,5 +37,13 @@ Building
 Running
 ---
 
-- `./qt_asio_sample`
+In one console
+
+- `./server/server`
+
+In the other console
+
+
+- `open client/client.app` (Mac)
+- `./client/client` (Linux/Windows)
 

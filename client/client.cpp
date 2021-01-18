@@ -1,23 +1,34 @@
 #include "mainwindow.h"
 
+#include <QApplication>
+#include <packio/packio.h>
+#include <thread>
+
+using packio::arg;
+using packio::nl_json_rpc::make_client;
+using packio::nl_json_rpc::rpc;
+
 int main(int argc, char *argv[])
 {
-   MyClient myClient;
 
-   myClient.client->socket().connect(myClient.server_ep);
-   
-   myClient.client->async_call("add", std::tuple{arg("a") = 24, arg("b") = 42},
-                         [&](packio::error_code, const rpc::response_type &r) {
-                            std::cout << 24 << " * " << 42 << " = " << r.result.get<int>() << std::endl;
-                           //  result = r.result.get<int>();
-                         });
+   using namespace packio::arg_literals;
+
+   // Declare a server and a client, sharing the same io_context
+   packio::net::io_context                                       io;
+   boost::asio::executor_work_guard<decltype(io.get_executor())> work{io.get_executor()};
+
+   packio::net::ip::tcp::endpoint server_ep{packio::net::ip::make_address("127.0.0.1"), 4000};
+   auto                           client = make_client(packio::net::ip::tcp::socket{io});
+
+   // Connect the client
+   client->socket().connect(server_ep);
 
    // Run the io_context
-   std::thread thread{[&] { myClient.io.run(); }};
+   std::thread thread{[&] { io.run(); }};
 
-   // Qt application initializatin
+   // Qt application initialization
    QApplication q(argc, argv);
-   MainWindow   w(&myClient);
+   MainWindow   w(client);
 
    w.show();
 

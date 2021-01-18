@@ -13,6 +13,7 @@ int main(int, char **)
 
    // Declare a synchronous callback with named arguments
    server->dispatcher()->add("add", {"a", "b"}, [](int a, int b) { return a + b; });
+   
    // Declare an asynchronous callback with named arguments
    server->dispatcher()->add_async("multiply", {"a", "b"}, [&io](completion_handler complete, int a, int b) {
       // Call the completion handler later

@@ -12,7 +12,7 @@ else(WIN32)
     set(APP_TYPE WIN32)
 endif()
 
-set(SOURCES client.cpp mainwindow.h mainwindow.cpp mainwindow.ui)
+set(SOURCES client.cpp mainwindow.h mainwindow.cpp mainwindow.ui resources.qrc)
 
 add_executable(${PROJECT_NAME} ${APP_TYPE} ${SOURCES})
 

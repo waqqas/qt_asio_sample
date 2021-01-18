@@ -28,11 +28,12 @@ int main(int argc, char *argv[])
 
    // Qt application initialization
    QApplication q(argc, argv);
-   MainWindow   w(client);
+   MainWindow   w(nullptr, client);
 
    w.show();
 
    int return_code = q.exec();
+   work.reset();
 
    thread.join();
 

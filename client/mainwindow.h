@@ -4,6 +4,8 @@
 #include "app_events.h"
 
 #include <QMainWindow>
+#include <QMenu>
+#include <QSystemTrayIcon>
 #include <packio/packio.h>
 
 QT_BEGIN_NAMESPACE
@@ -30,8 +32,11 @@ class MainWindow : public QMainWindow
    void handleAddResultEvent(const AddResultEvent *event);
 
  public:
-   MainWindow(packio_client_type &);
+   MainWindow(QWidget *parent, packio_client_type &);
    ~MainWindow();
+
+ public slots:
+   void iconActivated(QSystemTrayIcon::ActivationReason);
 
  private slots:
    void on_addButton_clicked();
@@ -39,5 +44,10 @@ class MainWindow : public QMainWindow
  private:
    packio_client_type &_client;
    Ui::MainWindow *    ui;
+
+   QSystemTrayIcon *trayIcon;
+   QMenu *          trayIconMenu;
+
+   QMenu *createMenu();
 };
 #endif  // MAINWINDOW_H

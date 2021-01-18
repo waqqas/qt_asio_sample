@@ -43,7 +43,5 @@ In one console
 
 In the other console
 
-
 - `open client/client.app` (Mac)
 - `./client/client` (Linux/Windows)
-

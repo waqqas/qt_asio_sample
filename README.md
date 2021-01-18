@@ -34,13 +34,14 @@ Building
 - `cmake ..`
 - `make`
 
-Running server
+Running
 ---
+
+In one console
 
 - `./server/server`
 
+In the other console
 
-Running client
----
-
-- `./client/client`
+- `open client/client.app` (Mac)
+- `./client/client` (Linux/Windows)

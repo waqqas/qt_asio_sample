@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include "app_events.h"
+#include "loginwindow.h"
 
 #include <QMenu>
 #include <QSystemTrayIcon>
@@ -24,19 +25,21 @@ class MainWindow : public QWidget
    ~MainWindow();
 
    void postAddResult(const int &result);
+   void showLoginWindow();
 
  public slots:
    void iconActivated(QSystemTrayIcon::ActivationReason);
 
  private:
    void handleAddRequestEvent(const AddRequestEvent *event);
-   void showLoginWindow();
 
  private:
    packio_client_type &_client;
 
    QSystemTrayIcon *trayIcon;
    QMenu *          trayIconMenu;
+
+   LoginWindow *login;
 
    QMenu *createMenu();
 };

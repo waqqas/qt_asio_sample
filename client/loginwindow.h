@@ -29,6 +29,7 @@ class LoginWindow : public QMainWindow
    void on_addButton_clicked();
 
  private:
+   QWidget *        _parent;
    Ui::LoginWindow *ui;
 };
 #endif  // LOGINWINDO_H

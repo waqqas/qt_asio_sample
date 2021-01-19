@@ -1,8 +1,7 @@
 #include "mainwindow.h"
 
-#include "loginwindow.h"
-
 #include <QApplication>
+#include <QDebug>
 
 using packio::arg;
 using packio::nl_json_rpc::make_client;
@@ -12,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent, MainWindow::packio_client_type &client)
    : QWidget(parent)
    , _client(client)
    , trayIcon(new QSystemTrayIcon(this))
+   , login(new LoginWindow(this))
 {
    // Tray icon menu
    auto menu = this->createMenu();
@@ -30,29 +30,28 @@ MainWindow::MainWindow(QWidget *parent, MainWindow::packio_client_type &client)
 }
 
 MainWindow::~MainWindow()
-{}
+{
+   delete login;
+   delete trayIcon;
+}
 
 QMenu *MainWindow::createMenu()
 {
    auto menu = new QMenu(this);
 
-   // App can exit via Quit menu
-   auto quitAction = new QAction("&Quit", this);
-   connect(quitAction, &QAction::triggered, qApp, &QCoreApplication::quit);
-
-   menu->addAction(quitAction);
-
    auto loginAction = new QAction("&Login", this);
    connect(loginAction, &QAction::triggered, this, &MainWindow::showLoginWindow);
    menu->addAction(loginAction);
+
+   auto quitAction = new QAction("&Quit", this);
+   connect(quitAction, &QAction::triggered, qApp, &QCoreApplication::quit);
+   menu->addAction(quitAction);
 
    return menu;
 }
 
 void MainWindow::showLoginWindow()
 {
-   LoginWindow *login = new LoginWindow(this);
-
    if (!login->isVisible())
    {
       login->show();
@@ -72,7 +71,7 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason_)
 
 void MainWindow::postAddResult(const int &result)
 {
-   QApplication::postEvent(this, new AddResultEvent(result));
+   QApplication::postEvent(login, new AddResultEvent(result));
 }
 
 void MainWindow::customEvent(QEvent *event)
@@ -81,6 +80,7 @@ void MainWindow::customEvent(QEvent *event)
    switch (event->type())
    {
    case ADD_REQUEST_EVENT:
+      qDebug() << "Main: ADD_REQUEST_EVENT";
       handleAddRequestEvent(static_cast<AddRequestEvent *>(event));
       break;
    }

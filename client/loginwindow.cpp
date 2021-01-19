@@ -2,8 +2,11 @@
 
 #include "./ui_loginwindow.h"
 
+#include <QDebug>
+
 LoginWindow::LoginWindow(QWidget *parent)
    : QMainWindow(parent)
+   , _parent(parent)
    , ui(new Ui::LoginWindow)
 {
    ui->setupUi(this);
@@ -19,7 +22,7 @@ void LoginWindow::on_addButton_clicked()
    int a = ui->input1->toPlainText().toInt();
    int b = ui->input2->toPlainText().toInt();
 
-   QApplication::postEvent(this, new AddRequestEvent(a, b));
+   QApplication::postEvent(_parent, new AddRequestEvent(a, b));
 }
 
 void LoginWindow::customEvent(QEvent *event)

@@ -18,9 +18,9 @@ class LoginWindow : public QMainWindow
    ~LoginWindow();
 
  signals:
-   void addRequested(int a, int b);
+   void addRequested(const int &a, const int &b);
  public slots:
-   void updateResult(int result);
+   void updateResult(const int &result);
 
  private slots:
    void on_addButton_clicked();

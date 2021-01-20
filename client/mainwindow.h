@@ -23,10 +23,10 @@ class MainWindow : public QWidget
    void showLoginWindow();
 
  public slots:
-   void sendAddRequest(const int a, const int b);
+   void sendAddRequest(const int &a, const int &b);
 
  signals:
-   void summedResult(int result);
+   void summedResult(const int &result);
 
  private:
    packio_client_type &_client;

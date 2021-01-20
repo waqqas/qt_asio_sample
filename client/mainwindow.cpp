@@ -58,7 +58,7 @@ void MainWindow::showLoginWindow()
    }
 }
 
-void MainWindow::sendAddRequest(const int a, const int b)
+void MainWindow::sendAddRequest(const int &a, const int &b)
 {
    _client->async_call("add", std::tuple{arg("a") = a, arg("b") = b},
                        [&](packio::error_code, const rpc::response_type &r) { emit summedResult(r.result.get<int>()); });

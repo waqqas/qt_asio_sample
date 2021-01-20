@@ -24,7 +24,7 @@ void LoginWindow::on_addButton_clicked()
    emit addRequested(a, b);
 }
 
-void LoginWindow::updateResult(int result)
+void LoginWindow::updateResult(const int &result)
 {
    ui->addOutput->setText(QString::number(result));
 }

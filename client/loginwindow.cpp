@@ -2,6 +2,7 @@
 
 #include "./ui_loginwindow.h"
 
+#include <QCloseEvent>
 #include <QDebug>
 
 LoginWindow::LoginWindow(QWidget *parent)
@@ -27,4 +28,10 @@ void LoginWindow::on_addButton_clicked()
 void LoginWindow::updateResult(const int &result)
 {
    ui->addOutput->setText(QString::number(result));
+}
+
+void LoginWindow::closeEvent(QCloseEvent *event)
+{
+   this->hide();
+   event->ignore();
 }

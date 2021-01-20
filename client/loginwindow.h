@@ -1,5 +1,5 @@
-#ifndef LOGINWINDO_H
-#define LOGINWINDO_H
+#ifndef LOGINWINDOW_H
+#define LOGINWINDOW_H
 
 #include <QMainWindow>
 
@@ -25,7 +25,10 @@ class LoginWindow : public QMainWindow
  private slots:
    void on_addButton_clicked();
 
+ protected:
+   void closeEvent(QCloseEvent *event);
+
  private:
    Ui::LoginWindow *ui;
 };
-#endif  // LOGINWINDO_H
+#endif  // LOGINWINDOW_H

@@ -1,7 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "app_events.h"
 #include "loginwindow.h"
 
 #include <QMenu>
@@ -17,21 +16,17 @@ class MainWindow : public QWidget
 
    Q_OBJECT
 
- protected:
-   void customEvent(QEvent *event);
-
  public:
    MainWindow(QWidget *parent, packio_client_type &);
    ~MainWindow();
 
-   void postAddResult(const int &result);
    void showLoginWindow();
 
  public slots:
-   void iconActivated(QSystemTrayIcon::ActivationReason);
+   void sendAddRequest(const int a, const int b);
 
- private:
-   void handleAddRequestEvent(const AddRequestEvent *event);
+ signals:
+   void summedResult(int result);
 
  private:
    packio_client_type &_client;

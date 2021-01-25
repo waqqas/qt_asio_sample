@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
    boost::asio::executor_work_guard<decltype(io.get_executor())> work{io.get_executor()};
 
    packio::net::ip::tcp::endpoint server_ep{packio::net::ip::make_address("127.0.0.1"), 4000};
-   auto                           client = make_client(packio::net::ip::tcp::socket{io});
+   auto client = make_client(packio::net::ip::tcp::socket{io});
 
    // Connect the client
    client->socket().connect(server_ep);
@@ -30,6 +30,7 @@ int main(int argc, char *argv[])
    QApplication q(argc, argv);
    MainWindow   w(nullptr, client);
 
+   q.setQuitOnLastWindowClosed(false);
    int return_code = q.exec();
    work.reset();
 

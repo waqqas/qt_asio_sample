@@ -2,6 +2,7 @@
 
 #include <QApplication>
 #include <QDebug>
+#include <unistd.h>
 
 using packio::arg;
 using packio::nl_json_rpc::make_client;
@@ -26,7 +27,10 @@ MainWindow::MainWindow(QWidget *parent, MainWindow::packio_client_type &client)
    this->trayIcon->show();
 
    // Interaction
-   connect(trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::iconActivated);
+   connect(trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::iconActivated); 
+   connect(this, &MainWindow::addResultRequested, login, &LoginWindow::setAddResult);
+   connect(this, &MainWindow::addResultRequested, login, &LoginWindow::clearWaitingMessage);
+   connect(this, &MainWindow::addResultRequested, login, &LoginWindow::clearLoader);
 }
 
 MainWindow::~MainWindow()
@@ -71,23 +75,12 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason_)
 
 void MainWindow::postAddResult(const int &result)
 {
-   QApplication::postEvent(login, new AddResultEvent(result));
+   usleep(1000000); // FIXME Only here to test the wait feature
+   emit addResultRequested(result);
 }
 
-void MainWindow::customEvent(QEvent *event)
-{
-#pragma GCC diagnostic ignored "-Wswitch"
-   switch (event->type())
-   {
-   case ADD_REQUEST_EVENT:
-      qDebug() << "Main: ADD_REQUEST_EVENT";
-      handleAddRequestEvent(static_cast<AddRequestEvent *>(event));
-      break;
-   }
-}
+void MainWindow::postAddOperationRequest(int a, int b) {
 
-void MainWindow::handleAddRequestEvent(const AddRequestEvent *event)
-{
-   _client->async_call("add", std::tuple{arg("a") = event->param1(), arg("b") = event->param2()},
+  _client->async_call("add", std::tuple{arg("a") = a, arg("b") = b},
                        [&](packio::error_code, const rpc::response_type &r) { postAddResult(r.result.get<int>()); });
 }

@@ -6,10 +6,13 @@
 
 LoginWindow::LoginWindow(QWidget *parent)
    : QMainWindow(parent)
-   , _parent(parent)
    , ui(new Ui::LoginWindow)
 {
    ui->setupUi(this);
+   // connect(this, &LoginWindow::addOperationRequested, parent, &MainWindow::postAddOperationRequest); // FIXME
+   connect(this, SIGNAL(addOperationRequested(int, int)), parent, SLOT(postAddOperationRequest(int,int)));
+   connect(this, &LoginWindow::addOperationRequested, this, &LoginWindow::showWaitingMessage);
+   connect(this, &LoginWindow::addOperationRequested, this, &LoginWindow::showLoadingGif);
 }
 
 LoginWindow::~LoginWindow()
@@ -22,21 +25,35 @@ void LoginWindow::on_addButton_clicked()
    int a = ui->input1->toPlainText().toInt();
    int b = ui->input2->toPlainText().toInt();
 
-   QApplication::postEvent(_parent, new AddRequestEvent(a, b));
+   emit addOperationRequested(a,b);
 }
 
-void LoginWindow::customEvent(QEvent *event)
+void LoginWindow::showWaitingMessage(int a, int b)
 {
-#pragma GCC diagnostic ignored "-Wswitch"
-   switch (event->type())
-   {
-   case ADD_RESULT_EVENT:
-      handleAddResultEvent(static_cast<AddResultEvent *>(event));
-      break;
-   }
+   ui->message->setText("Please Wait");
+   ui->addOutput->setText(""); 
 }
 
-void LoginWindow::handleAddResultEvent(const AddResultEvent *event)
+void LoginWindow::showLoadingGif()
 {
-   ui->addOutput->setText(QString::number(event->result()));
+   QMovie *movie = new QMovie("/home/emumba/Downloads/loader.gif");
+
+   ui->loader->setMovie(movie);
+   ui->loader->show();
+   movie->start(); 
+}
+
+void LoginWindow::setAddResult(int result)
+{
+   ui->addOutput->setText(QString::number(result));  
+}
+
+void LoginWindow::clearWaitingMessage()
+{
+   ui->message->clear();  
+}
+
+void LoginWindow::clearLoader()
+{
+   ui->loader->clear();
 }

@@ -1,7 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "app_events.h"
 #include "loginwindow.h"
 
 #include <QMenu>
@@ -17,9 +16,6 @@ class MainWindow : public QWidget
 
    Q_OBJECT
 
- protected:
-   void customEvent(QEvent *event);
-
  public:
    MainWindow(QWidget *parent, packio_client_type &);
    ~MainWindow();
@@ -29,9 +25,10 @@ class MainWindow : public QWidget
 
  public slots:
    void iconActivated(QSystemTrayIcon::ActivationReason);
-
- private:
-   void handleAddRequestEvent(const AddRequestEvent *event);
+   void postAddOperationRequest(int a, int b);
+  
+  signals:
+  void addResultRequested(int result);
 
  private:
    packio_client_type &_client;

@@ -36,7 +36,11 @@ void LoginWindow::showWaitingMessage(int a, int b)
 
 void LoginWindow::showLoadingGif()
 {
-   QMovie *movie = new QMovie("/home/emumba/Downloads/loader.gif");
+   QDir buildDirectoryPath = QDir::current();
+   buildDirectoryPath.cdUp();
+   QString projectDirectoryPath = buildDirectoryPath.path();
+   
+   QMovie *movie = new QMovie(projectDirectoryPath + "/loader.gif");
 
    ui->loader->setMovie(movie);
    ui->loader->show();
